@@ -1,5 +1,5 @@
-import {v} from "convex/values";
-import { internalMutation } from "./_generated/server";
+import { ConvexError, v} from "convex/values";
+import { internalMutation, query } from "./_generated/server";
 
 export const createUser = internalMutation({
     args: {
@@ -17,4 +17,93 @@ export const createUser = internalMutation({
             isOnline: true,
          });
     },
+});
+
+export const updateUser = internalMutation({
+	args: { tokenIdentifier: v.string(), image: v.string() },
+	async handler(ctx, args) {
+		const user = await ctx.db
+			.query("users")
+			.withIndex("by_tokenIdentifier", (q) => q.eq("tokenIdentifier", args.tokenIdentifier))
+			.unique();
+
+		if (!user) {
+			throw new ConvexError("User not found");
+		}
+
+		await ctx.db.patch(user._id, {
+			image: args.image,
+		});
+	},
+});
+
+export const setUserOnline = internalMutation({
+	args: { tokenIdentifier: v.string() },
+	handler: async (ctx, args) => {
+		const user = await ctx.db
+			.query("users")
+			.withIndex("by_tokenIdentifier", (q) => q.eq("tokenIdentifier", args.tokenIdentifier))
+			.unique();
+
+		if (!user) {
+			throw new ConvexError("User not found");
+		}
+
+		await ctx.db.patch(user._id, { isOnline: true });
+	},
+});
+
+export const setUserOffline = internalMutation({
+    args:{tokenIdentifier: v.string()},
+    handler: async (ctx, args) => {
+
+        console.log("setUserOffline called with tokenIdentifier:", args.tokenIdentifier);
+
+        const user = await ctx.db
+        .query("users")
+        .withIndex("by_tokenIdentifier", (q) => q.eq("tokenIdentifier", args.tokenIdentifier))
+        .unique();
+
+        if(!user){
+            throw new ConvexError("User not found");
+        }
+
+        await ctx.db.patch(user._id, {isOnline: false})  //convex use patch instead of update
+    }
+
+})
+
+export const getUsers = query({
+	args: {},
+	handler: async (ctx, args) => {
+		const identity = await ctx.auth.getUserIdentity();  //convex will handle it for us
+		if (!identity) {
+			throw new ConvexError("Unauthorized");
+		}
+
+		const users = await ctx.db.query("users").collect(); // get all users
+		return users.filter((user) => user.tokenIdentifier !== identity.tokenIdentifier);
+	},
+});
+
+
+export const getMe = query({
+	args: {},
+	handler: async (ctx, args) => {
+		const identity = await ctx.auth.getUserIdentity();
+		if (!identity) {
+			throw new ConvexError("Unauthorized");
+		}
+
+		const user = await ctx.db
+			.query("users")
+			.withIndex("by_tokenIdentifier", (q) => q.eq("tokenIdentifier", identity.tokenIdentifier))
+			.unique();
+
+		if (!user) {
+			throw new ConvexError("User not found");
+		}
+
+		return user;
+	},
 });
