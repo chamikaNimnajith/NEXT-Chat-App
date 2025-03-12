@@ -71,12 +71,12 @@ export const getRelativeDateTime = (message: any, previousMessage: any) => {
 			return "Yesterday";
 		} else if (messageDate.getTime() > lastWeek.getTime()) {
 			const options: Intl.DateTimeFormatOptions = {
-				weekday: "long",
+				weekday: "long",          //monday, tuesday, wednesday, thursday, friday, saturday, sunday
 			};
 			return messageDate.toLocaleDateString(undefined, options);
 		} else {
 			const options: Intl.DateTimeFormatOptions = {
-				day: "2-digit",
+				day: "2-digit",			
 				month: "2-digit",
 				year: "numeric",
 			};
