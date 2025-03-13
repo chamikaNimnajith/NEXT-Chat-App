@@ -1,6 +1,6 @@
 //kick user from a group component
 
-import {IMessage, useConversationStore} from "@/store/chat-store";
+import {IMessage, IUser, useConversationStore} from "@/store/chat-store";
 import {useMutation} from "convex/react";
 import {Ban, LogOut} from "lucide-react";
 import toast from "react-hot-toast";
@@ -9,7 +9,7 @@ import React from "react";
 
 type ChatAvatarActionsProps = {
     message: IMessage;
-    me: any;
+    me: IUser;
 };
 
 const ChatAvatarActions = ({me, message}: ChatAvatarActionsProps) => {
@@ -35,7 +35,7 @@ const ChatAvatarActions = ({me, message}: ChatAvatarActionsProps) => {
                 participants: selectedConversation.participants.filter((id) => id !== message.sender._id),
             });
         } catch (error) {
-            toast.error("Failed to kick user");
+            toast.error("Failed to kick user" + error);
         }
     };
 
@@ -53,9 +53,10 @@ const ChatAvatarActions = ({me, message}: ChatAvatarActionsProps) => {
                 isGroup: false,
                 isOnline: message.sender.isOnline,
                 image: message.sender.image,
+                _creationTime: Date.now(),
             });
         } catch (error) {
-            toast.error("Failed to create conversation");
+            toast.error("Failed to create conversation" + error);
         }
     };
 

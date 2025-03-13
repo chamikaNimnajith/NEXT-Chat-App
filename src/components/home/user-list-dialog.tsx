@@ -37,7 +37,7 @@ const UserListDialog = () => {
     const {setSelectedConversation} = useConversationStore();
 
     const handleCreateConversation = async () => {
-        if (selectedUsers.length === 0) return;
+        if (selectedUsers.length === 0 || !me?._id) return;
         setIsLoading(true);
 
         try {
@@ -45,7 +45,7 @@ const UserListDialog = () => {
             let conversationId;
             if (!isGroup) {
                 conversationId = await createConversation({
-                    participants: [...selectedUsers, me?._id!],
+                    participants: [...selectedUsers, me._id], // no need for '!'
                     isGroup: false,
                 });
             } else {
@@ -54,35 +54,39 @@ const UserListDialog = () => {
                 const result = await fetch(postUrl, {
                     //upload image to the storage
                     method: "POST",
-                    headers: {"Content-Type": selectedImage?.type!},
+                    headers: {"Content-Type": selectedImage?.type || ""},
                     body: selectedImage,
                 });
 
                 const {storageId} = await result.json();
 
                 conversationId = await createConversation({
-                    participants: [...selectedUsers, me?._id!],
+                    participants: [...selectedUsers, me._id], // no need for '!'
                     isGroup: true,
                     groupName,
                     groupImage: storageId,
-                    admin: me?._id!,
+                    admin: me._id, // no need for '!'
                 });
             }
+
             dialogCloseRef.current?.click();
             setSelectedUsers([]);
             setGroupName("");
             setSelectedImage(null);
 
-            //TODO: navigate to the conversation
-            const conversationName = isGroup ? groupName : users?.find((user) => user._id === selectedUsers[0])?.name!;
+            // Fallback for 'me._id' and 'users?.find'
+            const conversationName = isGroup
+                ? groupName
+                : users?.find((user) => user._id === selectedUsers[0])?.name || "Unknown";
 
             setSelectedConversation({
                 _id: conversationId,
                 participants: selectedUsers,
                 isGroup,
-                image: isGroup ? renderedImage : users?.find((user) => user._id === selectedUsers[0])?.image,
+                image: isGroup ? renderedImage : users?.find((user) => user._id === selectedUsers[0])?.image || "",
                 name: conversationName,
-                admin: me?._id,
+                admin: me._id,
+                _creationTime: Date.now(),
             });
         } catch (error) {
             toast.error("Failed to create conversation");

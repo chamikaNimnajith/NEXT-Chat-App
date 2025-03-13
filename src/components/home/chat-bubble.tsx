@@ -1,5 +1,5 @@
 import {MessageSeenSvg} from "@/lib/svgs";
-import {IMessage, useConversationStore} from "@/store/chat-store";
+import {IMessage, IUser, useConversationStore} from "@/store/chat-store";
 import ChatBubbleAvatar from "./chat-buble-avatar";
 import DateIndicator from "./date-indicator";
 import Image from "next/image";
@@ -11,7 +11,7 @@ import ChatAvatarActions from "./chat-avatar-actions";
 
 type ChatBubbleProps = {
     message: IMessage;
-    me: any;
+    me: IUser;
     previousMessage?: IMessage;
 };
 

@@ -11,11 +11,14 @@ export type Conversation = {
 	groupName?: string;
 	admin?: Id<"users">;
 	isOnline?: boolean;
+	_creationTime: number;
 	lastMessage?: {
 		_id: Id<"messages">;
 		conversation: Id<"conversations">;
 		content: string;
-		sender: Id<"users">;
+		sender: string | Id<"users">;
+		messageType: "text" | "image" | "video";
+		_creationTime: number;
 	};
 };
 
@@ -43,4 +46,14 @@ export interface IMessage {
 		_creationTime: number;
 		isOnline: boolean;
 	};
+}
+
+export interface IUser {
+   _id: Id<"users">;
+		image: string;
+		name?: string;
+		tokenIdentifier: string;
+		email: string;
+		_creationTime: number;
+		isOnline: boolean;
 }

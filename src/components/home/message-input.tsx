@@ -1,4 +1,4 @@
-import {Laugh, Mic, Plus, Send} from "lucide-react";
+import {Laugh, Mic, Send} from "lucide-react";
 import {Input} from "../ui/input";
 import {useState} from "react";
 import {Button} from "../ui/button";
@@ -27,8 +27,8 @@ const MessageInput = () => {
                 sender: me!._id,
             });
             setMsgText("");
-        } catch (error: any) {
-            toast.error(error.message);
+        } catch (error: unknown) {
+            toast.error(error as string);
             console.log("Error sending message", error);
         }
     };
@@ -37,7 +37,7 @@ const MessageInput = () => {
         <div className="bg-gray-primary p-2 flex gap-4 items-center">
             <div className="relative flex gap-2 ml-2">
                 {/* EMOJI PICKER WILL GO HERE */}
-                <div ref={ref} onClick={() => setIsComponentVisible(true)}>
+                <div ref={ref as React.RefObject<HTMLDivElement>} onClick={() => setIsComponentVisible(true)}>
                     {isComponentVisible && (
                         <Emojipicker
                             onEmojiClick={(emojiObject) => {

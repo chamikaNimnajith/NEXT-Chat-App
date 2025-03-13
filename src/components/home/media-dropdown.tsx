@@ -47,7 +47,7 @@ const MediaDropdown = () => {
 
             setSelectedImage(null);
         } catch (err) {
-            toast.error("Failed to send image");
+            toast.error("Failed to send image" + err);
         } finally {
             setIsLoading(false);
         }
@@ -73,6 +73,7 @@ const MediaDropdown = () => {
 
             setSelectedVideo(null);
         } catch (error) {
+            toast.error("Failed to send video" + error);
         } finally {
             setIsLoading(false);
         }

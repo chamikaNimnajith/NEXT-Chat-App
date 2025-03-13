@@ -4,9 +4,10 @@ import {MessageSeenSvg} from "@/lib/svgs";
 import {ImageIcon, Users, VideoIcon} from "lucide-react";
 import {useQuery} from "convex/react";
 import {api} from "../../../convex/_generated/api";
+import type {Conversation} from "@/store/chat-store";
 import {useConversationStore} from "@/store/chat-store";
 
-const Conversation = ({conversation}: {conversation: any}) => {
+const Conversation = ({conversation}: {conversation: Conversation}) => {
     const conversationImage = conversation.groupImage || conversation.image;
     const conversationName = conversation.groupName || conversation.name;
     const lastMessage = conversation.lastMessage;
@@ -44,7 +45,7 @@ const Conversation = ({conversation}: {conversation: any}) => {
                         {conversation.isGroup && <Users size={16} />}
                         {!lastMessage && "Say Hi!"}
                         {lastMessageType === "text" ? (
-                            lastMessage?.content.length > 30 ? (
+                            lastMessage?.content.length! > 30 ? (
                                 <span className="text-xs">{lastMessage?.content.slice(0, 30)}...</span>
                             ) : (
                                 <span className="text-xs">{lastMessage?.content}</span>

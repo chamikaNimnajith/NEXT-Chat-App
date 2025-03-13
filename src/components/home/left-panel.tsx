@@ -7,7 +7,7 @@ import {UserButton} from "@clerk/nextjs";
 import UserListDialog from "./user-list-dialog";
 import {useConvexAuth, useQuery} from "convex/react";
 import {api} from "../../../convex/_generated/api";
-import {useConversationStore} from "@/store/chat-store";
+import {Conversation as ConversationType, useConversationStore} from "@/store/chat-store";
 import {useEffect} from "react";
 
 const LeftPanel = () => {
@@ -58,7 +58,7 @@ const LeftPanel = () => {
             {/* Chat List */}
             <div className="my-3 flex flex-col gap-0 max-h-[80%] overflow-auto">
                 {/* Conversations will go here*/}
-                {conversations?.map((conversation: any) => (
+                {conversations?.map((conversation: ConversationType) => (
                     <Conversation key={conversation._id} conversation={conversation} />
                 ))}
 
