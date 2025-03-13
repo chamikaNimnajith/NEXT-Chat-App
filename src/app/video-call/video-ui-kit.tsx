@@ -13,6 +13,7 @@ export default function VideoUIKit() {
 
     const myMeeting = (element: HTMLDivElement) => {
         const initMeeting = async () => {
+            if (!user) return;
             const res = await fetch(`/api/zegocloud?userID=${user?.id}`);
             const {token, appID} = await res.json();
 

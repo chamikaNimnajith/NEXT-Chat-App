@@ -45,7 +45,7 @@ const Conversation = ({conversation}: {conversation: Conversation}) => {
                         {conversation.isGroup && <Users size={16} />}
                         {!lastMessage && "Say Hi!"}
                         {lastMessageType === "text" ? (
-                            lastMessage?.content.length! > 30 ? (
+                            lastMessage?.content?.length && lastMessage.content.length > 30 ? (
                                 <span className="text-xs">{lastMessage?.content.slice(0, 30)}...</span>
                             ) : (
                                 <span className="text-xs">{lastMessage?.content}</span>
