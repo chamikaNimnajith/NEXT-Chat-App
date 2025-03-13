@@ -19,7 +19,7 @@ export default function VideoUIKit() {
 
             const username = user?.fullName || user?.emailAddresses[0].emailAddress.split("@")[0];
 
-            const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(appID, token, roomID, user?.id!, username);
+            const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(appID, token, roomID, user.id, username);
 
             // Creates a new video call instance (zp)
             const zp = ZegoUIKitPrebuilt.create(kitToken);
