@@ -6,6 +6,7 @@ type DateIndicatorProps = {
     previousMessage?: IMessage;
 };
 const DateIndicator = ({message, previousMessage}: DateIndicatorProps) => {
+    if (!previousMessage) return null;
     return (
         <>
             {!previousMessage || !isSameDay(previousMessage._creationTime, message._creationTime) ? (
